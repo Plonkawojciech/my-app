@@ -3,31 +3,20 @@
 import { useState } from 'react'
 
 export default function Home() {
-  const list = [
-    {
-      id: '1',
-      name: 'zjesc obiad',
-    },
-    {
-      id: '2',
-      name: 'zrobic pranie',
-    },
-  ]
-
   const [name, setName] = useState('')
-  const [todos, setTodos] = useState(list)
+  const [todos, setTodos] = useState([])
 
-  // handler musi być wewnątrz komponentu, żeby mieć dostęp do setName
   const addTodoInput = (e) => {
     setName(e.target.value)
   }
 
   function addTodoBtn() {
-    const newTodos = todos.concat({ name, id: crypto.randomUUID() })
-
-    setTodos(newTodos)
-
+    setTodos((prev) => [...prev, { id: crypto.randomUUID(), name }])
     setName('')
+  }
+
+  function deleteBtn(id) {
+    setTodos(todos.filter((a) => a.id !== id))
   }
 
   return (
@@ -54,7 +43,9 @@ export default function Home() {
               <input type="checkbox" className="checkbox" />
               <span className="todo-title">{todo.name}</span>
             </div>
-            <button className="todo-delete">delete</button>
+            <button className="todo-delete" onClick={() => deleteBtn(todo.id)}>
+              delete
+            </button>
           </li>
         ))}
       </ul>
